@@ -3,7 +3,7 @@
      Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
-  name="roboticarm_desc">
+  name="robotic_arm_desc">
   <link
     name="base_link">
     <inertial>
@@ -26,7 +26,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/base_link.STL" />
+          filename="package://robotic_arm_desc/meshes/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -34,13 +34,18 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/base_link.STL" />
+          filename="package://robotic_arm_desc/meshes/base_link.STL" />
+      </geometry>
+    </collision> -->
+    <collision>
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
       </geometry>
     </collision>
   </link>
@@ -66,7 +71,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_1.STL" />
+          filename="package://robotic_arm_desc/meshes/link_1.STL" />
       </geometry>
       <material
         name="">
@@ -80,7 +85,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_1.STL" />
+          filename="package://robotic_arm_desc/meshes/link_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -124,7 +129,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_2.STL" />
+          filename="package://robotic_arm_desc/meshes/link_2.STL" />
       </geometry>
       <material
         name="">
@@ -138,7 +143,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_2.STL" />
+          filename="package://robotic_arm_desc/meshes/link_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -182,7 +187,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_3.STL" />
+          filename="package://robotic_arm_desc/meshes/link_3.STL" />
       </geometry>
       <material
         name="">
@@ -196,7 +201,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_3.STL" />
+          filename="package://robotic_arm_desc/meshes/link_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -240,7 +245,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_4.STL" />
+          filename="package://robotic_arm_desc/meshes/link_4.STL" />
       </geometry>
       <material
         name="">
@@ -254,7 +259,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_4.STL" />
+          filename="package://robotic_arm_desc/meshes/link_4.STL" />
       </geometry>
     </collision>
   </link>
@@ -296,7 +301,7 @@
       <origin xyz="0 0 -0.04" rpy="0 0 0"/>
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_5.STL" />
+          filename="package://robotic_arm_desc/meshes/link_5.STL" />
       </geometry>
       <material
         name="">
@@ -308,7 +313,7 @@
       <origin xyz="0 0 -0.04" rpy="0 0 0"/>
       <geometry>
         <mesh
-          filename="package://roboticarm_desc/meshes/link_5.STL" />
+          filename="package://robotic_arm_desc/meshes/link_5.STL" />
       </geometry>
     </collision>
   </link>
@@ -335,7 +340,7 @@
     <visual>
       <origin xyz="0 0 -0.04" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://roboticarm_desc/meshes/link_6.STL"/>
+        <mesh filename="package://robotic_arm_desc/meshes/link_6.STL"/>
       </geometry>
       <material name="">
         <color rgba="0.8 0.8 0.8 1"/>
@@ -345,7 +350,7 @@
     <collision>
       <origin xyz="0 0 -0.04" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://roboticarm_desc/meshes/link_6.STL"/>
+        <mesh filename="package://robotic_arm_desc/meshes/link_6.STL"/>
       </geometry>
     </collision>
   </link>
@@ -368,7 +373,7 @@
 
   <ros2_control name="MyRobotSystem" type="system">
   <hardware>
-    <plugin>gz_ros2_control/GazeboSystem</plugin>
+    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
   </hardware>
 
   <joint name="joint_1">
@@ -398,10 +403,22 @@
 
   
   <joint name="joint_6">
+    <command_interface name="position"/>
     <state_interface name="position"/>
   </joint>
 
   </ros2_control> 
+
+  <gazebo>
+  <plugin filename="libgz_ros2_control-system.so"
+          name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+
+    <parameters>
+      /home/rounak/projects/robotic_arm_4dof_ws/install/robotic_arm_desc/share/robotic_arm_desc/config/controllers.yaml
+    </parameters>
+
+  </plugin>
+</gazebo>
 
 
 </robot>
