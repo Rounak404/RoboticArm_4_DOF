@@ -10,7 +10,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/world.launch.py', 'launch/spawn_robot.launch.py']),
+        ('share/' + package_name + '/launch', ['launch/gazebo.launch.py']),
         ('share/' + package_name + '/worlds', ['worlds/robotic_arm_world.sdf']),
     ],
     install_requires=['setuptools'],

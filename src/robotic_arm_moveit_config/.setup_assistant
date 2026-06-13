@@ -1,13 +1,13 @@
 moveit_setup_assistant_config:
   urdf:
     package: robotic_arm_desc
-    relative_path: urdf/robotic_arm.urdf
+    relative_path: urdf/robotic_arm.urdf.xacro
   srdf:
-    relative_path: config/roboticarm_desc.srdf
+    relative_path: config/robotic_arm_desc.srdf
   package_settings:
-    author_name: Rounak
-    author_email: rounak@gmail.com
-    generated_timestamp: 1781249804
+    author_name: rounak
+    author_email: rounak@email.com
+    generated_timestamp: 1781332044
   control_xacro:
     command:
       - position

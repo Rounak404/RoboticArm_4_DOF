@@ -3,5 +3,5 @@ from moveit_configs_utils.launches import generate_move_group_launch
 
 
 def generate_launch_description():
-    moveit_config = MoveItConfigsBuilder("roboticarm_desc", package_name="robotic_arm_moveit_config").to_moveit_configs()
+    moveit_config = MoveItConfigsBuilder("robotic_arm_desc", package_name="robotic_arm_moveit_config").to_moveit_configs()
     return generate_move_group_launch(moveit_config)

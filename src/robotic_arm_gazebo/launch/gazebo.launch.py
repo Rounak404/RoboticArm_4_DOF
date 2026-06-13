@@ -3,8 +3,9 @@ from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import PathJoinSubstitution
-from launch.actions import SetEnvironmentVariable, IncludeLaunchDescription
+from launch.actions import SetEnvironmentVariable, IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+import xacro
 import os
 
 def generate_launch_description():
@@ -26,16 +27,16 @@ def generate_launch_description():
         'config',
         'controllers.yaml'
     )
-    print("WORLD FILE:", gz_world_path)
 
-    urdf_file = os.path.join(
-    robotic_arm_desc_path,
-    'urdf',
-    'robotic_arm.urdf'
-)
+    xacro_file = os.path.join(
+        robotic_arm_desc_path,
+        'urdf',
+        'robotic_arm.urdf.xacro'
+    )
 
-    with open(urdf_file, 'r') as f:
-        robot_description = f.read()
+    robot_description_config = xacro.process_file(xacro_file, mappings={'use_gazebo': 'true'})
+
+    robot_description = robot_description_config.toxml()
 
 
     robot_state_publisher = Node(
@@ -45,6 +46,27 @@ def generate_launch_description():
             {'robot_description': robot_description},
             {'use_sim_time': True}
         ],
+        output='screen'
+    )
+
+    joint_state_broadcaster = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['joint_state_broadcaster'],
+        output='screen'
+    )
+
+    arm_controller = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['arm_controller'],
+        output='screen'
+    )
+
+    gripper_controller = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['gripper_controller'],
         output='screen'
     )
 
@@ -58,7 +80,7 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(gz_launch_path),
             launch_arguments={
-                'gz_args': ['', gz_world_path],
+                'gz_args': ['-r ','-s ', gz_world_path],
                 'on_exit_shutdown': 'true'
                 }.items(),
         ),
@@ -88,21 +110,15 @@ def generate_launch_description():
             ],
             output = 'screen'
         ),
-        Node(
-            package='controller_manager',
-            executable='spawner',
-            arguments=['joint_state_broadcaster']
+        joint_state_broadcaster,
+
+        TimerAction(
+            period=5.0,
+            actions=[arm_controller]
         ),
 
-        Node(
-            package='controller_manager',
-            executable='spawner',
-            arguments=['arm_controller']
-        ),
-
-        Node(
-            package='controller_manager',
-            executable='spawner',
-            arguments=['gripper_controller']
-        ),
+        TimerAction(
+            period=8.0,
+            actions=[gripper_controller]
+),
     ])

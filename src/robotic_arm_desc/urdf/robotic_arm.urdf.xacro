@@ -3,7 +3,24 @@
      Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
-  name="robotic_arm_desc">
+  name="robotic_arm_desc"
+   xmlns:xacro="http://www.ros.org/wiki/xacro"
+  >
+
+  <xacro:arg name="use_gazebo" default="false"/>
+
+  <xacro:property name="mesh_pkg" value="package://robotic_arm_desc/meshes"/>   
+
+  <xacro:if value="$(arg use_gazebo)">
+    <xacro:include filename="$(find robotic_arm_desc)/urdf/gazebo_ros2_control.xacro"/>
+    <xacro:include filename="$(find robotic_arm_desc)/urdf/gazebo.xacro"/>
+  </xacro:if>
+
+  <xacro:unless value="$(arg use_gazebo)">
+    <xacro:include filename="$(find robotic_arm_desc)/urdf/ros2_control.xacro"/>
+  </xacro:unless>
+
+
   <link
     name="base_link">
     <inertial>
@@ -25,8 +42,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/base_link.STL" />
+        <mesh filename="${mesh_pkg}/base_link.STL"/>
       </geometry>
       <material
         name="">
@@ -34,15 +50,14 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <!-- <collision>
+    <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/base_link.STL" />
+        <mesh filename="${mesh_pkg}/base_link.STL"/>
       </geometry>
-    </collision> -->
+    </collision>
     <collision>
       <geometry>
         <box size="0.05 0.05 0.05"/>
@@ -70,8 +85,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_1.STL" />
+        <mesh filename="${mesh_pkg}/link_1.STL"/>
       </geometry>
       <material
         name="">
@@ -84,8 +98,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_1.STL" />
+        <mesh filename="${mesh_pkg}/link_1.STL"/>
       </geometry>
     </collision>
   </link>
@@ -128,8 +141,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_2.STL" />
+        <mesh filename="${mesh_pkg}/link_2.STL"/>
       </geometry>
       <material
         name="">
@@ -142,8 +154,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_2.STL" />
+        <mesh filename="${mesh_pkg}/link_2.STL"/>
       </geometry>
     </collision>
   </link>
@@ -186,8 +197,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_3.STL" />
+        <mesh filename="${mesh_pkg}/link_3.STL"/>
       </geometry>
       <material
         name="">
@@ -200,8 +210,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_3.STL" />
+        <mesh filename="${mesh_pkg}/link_3.STL"/>
       </geometry>
     </collision>
   </link>
@@ -244,8 +253,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_4.STL" />
+        <mesh filename="${mesh_pkg}/link_4.STL"/>
       </geometry>
       <material
         name="">
@@ -258,8 +266,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_4.STL" />
+        <mesh filename="${mesh_pkg}/link_4.STL"/>
       </geometry>
     </collision>
   </link>
@@ -300,8 +307,7 @@
     <visual>
       <origin xyz="0 0 -0.04" rpy="0 0 0"/>
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_5.STL" />
+        <mesh filename="${mesh_pkg}/link_5.STL"/>
       </geometry>
       <material
         name="">
@@ -312,8 +318,7 @@
     <collision>
       <origin xyz="0 0 -0.04" rpy="0 0 0"/>
       <geometry>
-        <mesh
-          filename="package://robotic_arm_desc/meshes/link_5.STL" />
+        <mesh filename="${mesh_pkg}/link_5.STL"/>
       </geometry>
     </collision>
   </link>
@@ -340,7 +345,7 @@
     <visual>
       <origin xyz="0 0 -0.04" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://robotic_arm_desc/meshes/link_6.STL"/>
+        <mesh filename="${mesh_pkg}/link_6.STL"/>
       </geometry>
       <material name="">
         <color rgba="0.8 0.8 0.8 1"/>
@@ -350,7 +355,7 @@
     <collision>
       <origin xyz="0 0 -0.04" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://robotic_arm_desc/meshes/link_6.STL"/>
+        <mesh filename="${mesh_pkg}/link_6.STL"/>
       </geometry>
     </collision>
   </link>
@@ -369,56 +374,14 @@
     <child link="tcp_link"/>
     <origin xyz="0 0 0.09" rpy="0 0 0"/>
   </joint>
+  <xacro:if value="$(arg use_gazebo)">
+    <xacro:robotic_arm_desc_ros2_control
+        name="MyRobotSystem"/>
+  </xacro:if>
 
-
-  <ros2_control name="MyRobotSystem" type="system">
-  <hardware>
-    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-  </hardware>
-
-  <joint name="joint_1">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-  </joint>
-
-  <joint name="joint_2">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-  </joint>
-
-  <joint name="joint_3">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-  </joint>
-
-  <joint name="joint_4">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-  </joint>
-
-  <joint name="joint_5">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-  </joint>
-
-  
-  <joint name="joint_6">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-  </joint>
-
-  </ros2_control> 
-
-  <gazebo>
-  <plugin filename="libgz_ros2_control-system.so"
-          name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-
-    <parameters>
-      /home/rounak/projects/robotic_arm_4dof_ws/install/robotic_arm_desc/share/robotic_arm_desc/config/controllers.yaml
-    </parameters>
-
-  </plugin>
-</gazebo>
-
+  <xacro:unless value="$(arg use_gazebo)">
+    <xacro:robotic_arm_desc_ros2_control
+        name="MyRobotSystem"/>
+  </xacro:unless>
 
 </robot>
