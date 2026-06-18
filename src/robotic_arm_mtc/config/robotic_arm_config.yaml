@@ -1,0 +1,70 @@
+/**:
+  ros__parameters:
+
+    # Number of solutions to search
+    max_solutions: 10
+
+    # MoveIt groups
+    arm_group_name: "arm"
+    eef_name: "gripper"
+    hand_group_name: "gripper"
+
+    # TCP frame
+    hand_frame: "tcp_link"
+
+    # SRDF named states
+    arm_home_pose: "home"
+    arm_initialize_pose: "initialize"
+
+    hand_open_pose: "open"
+    hand_close_pose: "close"
+
+    # Frames
+    world_frame: "base_link"
+    table_reference_frame: "base_link"
+    object_reference_frame: "base_link"
+    surface_link: "base_link"
+
+    # Object
+    object_name: "box"
+
+    # Box dimensions [x,y,z]
+    object_dimensions:
+      [0.05, 0.05, 0.05]
+
+    # Object pose [x,y,z,r,p,y]
+    object_pose:
+      [-0.19, -0.15, 0.0,
+      0.0, 0.0, 0.0]
+
+    # Table
+    spawn_table: false
+
+    table_name: "table"
+
+    table_dimensions:
+      [0.40, 0.40, 0.05]
+
+    table_pose:
+      [0.20, 0.00, -0.025,
+       0.0, 0.0, 0.0]
+
+    # TCP -> grasp offset
+    grasp_frame_transform:
+      [0.0, 0.0, 0.0,
+       0.0, -0.785, 0.0]
+
+    # Place pose
+    place_pose:
+      [0.15, -0.15, 0.025,
+       0.0, 0.0, 0.0]
+
+    place_surface_offset: 0.001
+
+    # Approach motion
+    approach_object_min_dist: 0.03
+    approach_object_max_dist: 0.10
+
+    # Lift motion
+    lift_object_min_dist: 0.05
+    lift_object_max_dist: 0.15

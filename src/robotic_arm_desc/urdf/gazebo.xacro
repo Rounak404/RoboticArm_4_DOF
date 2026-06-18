@@ -3,7 +3,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 <gazebo>
-  <plugin filename="libgz_ros2_control-system.so"
+  <plugin filename="libgz_ros2_control-system"
           name="gz_ros2_control::GazeboSimROS2ControlPlugin">
 
     <parameters>

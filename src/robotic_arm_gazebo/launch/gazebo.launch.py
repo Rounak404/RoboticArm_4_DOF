@@ -13,14 +13,17 @@ def generate_launch_description():
     ros_gz_sim_pkg_path = get_package_share_directory('ros_gz_sim')
 
     # Package paths
-    robotic_arm_pkg_path = FindPackageShare('robotic_arm_gazebo')  # Replace with your own package name
-    robotic_arm_desc_path = get_package_share_directory('robotic_arm_desc')  # Replace with your own description package name 
+    robotic_arm_pkg_path = FindPackageShare('robotic_arm_gazebo')  
+    robotic_arm_desc_path = get_package_share_directory('robotic_arm_desc')  
+    
+    # 🟢 Calculate the master share directory correctly
+    workspace_share_dir = os.path.dirname(robotic_arm_desc_path)
 
-     # Gazebo launch file
+    # Gazebo launch file
     gz_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, 'launch', 'gz_sim.launch.py'])
 
     # World file
-    gz_world_path = PathJoinSubstitution([robotic_arm_pkg_path, 'worlds', 'robotic_arm_world.sdf'])  # Replace with your own world file
+    gz_world_path = PathJoinSubstitution([robotic_arm_pkg_path, 'worlds', 'robotic_arm_world.sdf'])  
 
     controller_config = os.path.join(
         robotic_arm_desc_path,
@@ -35,9 +38,7 @@ def generate_launch_description():
     )
 
     robot_description_config = xacro.process_file(xacro_file, mappings={'use_gazebo': 'true'})
-
     robot_description = robot_description_config.toxml()
-
 
     robot_state_publisher = Node(
         package='robot_state_publisher',
@@ -71,9 +72,14 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        # 🟢 FIXED: Map BOTH environment keys uniformly to workspace_share_dir
         SetEnvironmentVariable(
-            'GZ_SIM_RESOURCE_PATH',
-            os.path.dirname(robotic_arm_desc_path),
+            name='GZ_SIM_RESOURCE_PATH',
+            value=workspace_share_dir,
+        ),
+        SetEnvironmentVariable(
+            name='GAZEBO_MODEL_PATH',
+            value=workspace_share_dir
         ),
 
         # Gazebo launch file with world
@@ -95,7 +101,6 @@ def generate_launch_description():
             output='screen'
         ),
 
-        # Include the display.launch.py from the robotic_arm_desc package
         robot_state_publisher,
 
         Node(
@@ -120,5 +125,5 @@ def generate_launch_description():
         TimerAction(
             period=8.0,
             actions=[gripper_controller]
-),
+        ),
     ])

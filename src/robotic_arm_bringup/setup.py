@@ -10,7 +10,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/moveit_gazebo.launch.py']),
+        ('share/' + package_name + '/launch', ['launch/moveit_gazebo.launch.py','launch/run_pick_place_gazebo.launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -25,6 +25,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'pick_place_demo = robotic_arm_bringup.pick_place_demo:main',
         ],
     },
 )
